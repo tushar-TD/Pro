@@ -1,44 +1,34 @@
 import React from 'react'
-
-export default function Header() {
+import logo from "../images/logo.jpg"
+import { Link } from 'react-router-dom'
+import { FaUserAlt } from "react-icons/fa"
+import { BsFillCartFill } from "react-icons/bs"
+function Header() {
   return (
-    <div>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li>
-            </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+    <header className='fixed shadow-md w-full h-17 px-2 md-px-4' >
+      <div className='flex items-center h-full justify-between'>
+        <Link to={""}>
+          <div className='h-16'>
+            <img src={logo} className='h-full' />
           </div>
+        </Link>
+
+        <div className='flex items-center gap-5 md:gap-7'>
+          <nav className='flex gap-4 md:gap-7 text-base md:text-lg'>
+            <Link to={""}>Home</Link>
+            <Link to={"menu"}>Menu</Link>
+            <Link to={"about"}>About</Link>
+            <Link to={"contact"}>Contact</Link></nav>
+          <div className='text-2xl bg-text-600'><BsFillCartFill /></div>
+          <div className='text-2xl bg-text-600'><FaUserAlt /></div>
         </div>
-      </nav>
-    </div>
+
+
+
+      </div >
+
+    </header >
   )
 }
+
+export default Header
