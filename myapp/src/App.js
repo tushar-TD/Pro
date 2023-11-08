@@ -1,12 +1,13 @@
-
-import React, { useState } from 'react';
-
-import StateDropdownForm from './Components/StateDropdownForm';
-import Header from './Components/Header';
+import React from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Outlet } from 'react-router-dom';
-import { toast, Toaster } from 'react-hot-toast'
+import { useSelector } from 'react-redux';
+import Header from './Components/Header';
+import StateDropdownForm from './Components/StateDropdownForm';
 
-function App(props) {
+function App() {
+  // If you don't need 'useState' or 'useDispatch', you can remove the imports
+
   return (
     <>
       <Toaster />
