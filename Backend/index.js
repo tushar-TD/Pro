@@ -72,4 +72,42 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log('Server is running at PORT:' + PORT));
+app.post('/login', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Basic input validation
+    if (!email) {
+      return res.status(400).send({ message: 'Email is required' });
+    }
+
+    // Find the user by email
+    const user = await userModel.findOne({ email: email }).exec();
+
+    if (user) {
+      const dataSend = {
+        _id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        profilpic: user.profilpic
+      };
+      console.log(dataSend);
+      return res.send({
+        message: 'Login Successful',
+        alert: true,
+        data: dataSend
+      });
+    } else {
+      // User not found, send an error response
+      return res.status(401).send({ message: 'Invalid email or password', alert: false });
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).send({ message: 'Internal Server Error', alert: false });
+  }
+});
+
+
+
+app.listen(PORT, () => console.log('Server is running at PORT:' + PORT))

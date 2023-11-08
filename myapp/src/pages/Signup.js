@@ -69,7 +69,7 @@ const Signup = () => {
           //alert(dataRes.message);
           toast(dataRes.message);
           // Redirect to the login page after successful signup
-          // Example: navigate("/login");
+          navigate("/login");
         } catch (error) {
           console.error("Error during signup:", error);
           alert("Error during signup. Please try again later.");

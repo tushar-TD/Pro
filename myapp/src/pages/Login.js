@@ -1,77 +1,116 @@
-import React from 'react'
-import pic from "../images/tush.jpg";
-import { BiHide, BiShow } from "react-icons/bi";
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { BiHide, BiShow } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import pic from '../images/tush.jpg';
+import { toast } from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRedux } from "../redux/userSlice"
 
 
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  });
+  const navigate = useNavigate();
+  const userData = useSelector(state => state)
+  console.log(userData.user);
 
+  const dispatch = useDispatch()
   const handleShowPassword = () => {
-    setShowPassword(preve => !preve);
+    setShowPassword(prev => !prev);
   };
 
-  const [data, setData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    confirmpassword: "",
-  });
-  console.log(data);
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const handleOnchange = (e) => {
-    const { name, value } = e.target
-    setData((preve) => {
-      return {
-        ...preve,
-        [name]: value
-
-      }
-    })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const { email, password } = data
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = data;
     if (email && password) {
-      if (password) {
-        alert("Done!")
+      try {
+        const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const dataRes = await fetchData.json();
+        console.log(dataRes);
+        toast(dataRes.message)
+        if (dataRes.alert) {
+          dispatch(loginRedux(dataRes))
+          setTimeout(() => {
+            navigate("/")
+          }, 1000)
+        }
+        else {
+
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
       }
+    } else {
+      alert('Please enter data');
     }
-    else {
-      alert("Please enter data");
-    }
-  }
+  };
 
   return (
-    <div className='p-3 md:p-4 '>
-      <div className='w-full max-w-md bg-white m-auto flex items-center flex-col p-4'>
-        <h5 className='text-center font-bold'>Login</h5> <br />
-        <div className='w-20 overflow-hidden rounded-full drop-shadow-md shadow-md' >
-          <img src={pic} className='w-full' />
+    <div className="p-3 md:p-4">
+      <div className="w-full max-w-md bg-white m-auto flex items-center flex-col p-4">
+        <h5 className="text-center font-bold">Login</h5> <br />
+        <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md">
+          <img src={pic} alt="profile-pic" className="w-full" />
         </div>
-        <form className='w-full py-3 flex flex-col' onSubmit={handleSubmit} >
+        <form className="w-full py-3 flex flex-col" onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="mt-1 w-full bg-slate-300 p-1 px-2 py-1 rounded focus:outline-blue-400"
+            value={data.email}
+            onChange={handleOnChange}
+          />
 
+          <label htmlFor="password">Password</label>
+          <div className="flex px-2 py-1 bg-slate-300 rounded mt-1 focus:outline-blue-400">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              className="w-full bg-slate-300 p-1 border-none focus:outline-blue-400"
+              value={data.password}
+              onChange={handleOnChange}
+            />
+            <span className="flex text-xl cursor-pointer mt-2" onClick={handleShowPassword}>
+              {showPassword ? <BiShow /> : <BiHide />}
+            </span>
+          </div>
 
-          <lable htmlFor='email' >Email</lable>
-          <input type='email' id='email' name='email' className='mt-1 w-full bg-slate-300 p-1 px-2 py-1 rounded  focus-within:outline-blue-400' value={data.email} onChange={handleOnchange}></input>
+          <button
+            type="submit"
+            className="w-full max-w-[150px] m-auto bg-blue-500 cursor-pointer hover:bg-blue-300 text-white text-xl font-medium text-center py-1 rounded-full mt-4"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-sm">
+          Don't have an account? <Link className="text-blue-500 underline" to="/signup">Signup</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
 
-          <lable htmlFor="password" >Password</lable>
-          <div className='flex px-2 py-1 bg-slate-300 rounded mt-1  focus-within:outline-blue-400'>
-            <input type={showPassword ? 'text' : 'password'} id='password' name='password' className=' w-full bg-slate-300 p-1 border-none   focus-within:outline-blue-400' value={data.password} onChange={handleOnchange}></input>
-            <span className='flex text-xl cursor-pointer mt-2' onClick={handleShowPassword}>{showPassword ? < BiShow /> : <BiHide />}</span>
-          </div >
-
-
-          <button type='submit' className='w-full max-w-[150px] m-auto bg-blue-500 cursor-pointer hover:bg-red-300 text-white text-xl font-medium text-center py-1 rounded-full mt-4'>Login</button>
-        </form >
-        <p className='text-sm'>Don't have Account <Link className='text-blue-500 &nbsp underline' to={"/signup"}>Signup</Link></p>
-      </div >
-    </div >
-  )
-}
-
-export default Login
+export default Login;
