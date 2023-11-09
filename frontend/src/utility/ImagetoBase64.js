@@ -1,5 +1,4 @@
-
-async function ImagetoBase64(file) {
+function ImagetoBase64(file) {
   const reader = new FileReader()
   reader.readAsDataURL(file)
 
@@ -7,8 +6,6 @@ async function ImagetoBase64(file) {
     reader.onload = () => resolve(reader.result)
     reader.onerror = err => reject(err)
   })
-
-  return data
+  return data;
 }
-
 export { ImagetoBase64 }

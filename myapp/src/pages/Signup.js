@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Login from './Login';
 import { toast } from "react-hot-toast"
 import { useNavigate } from 'react-router-dom';
-import { imagetoBase64 } from '../Utility/ImagetoBase64';
+import { ImagetoBase64 } from '../utility/ImagetoBase64'
 const Signup = () => {
   const navigate = useNavigate()
 

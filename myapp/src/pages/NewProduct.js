@@ -1,47 +1,118 @@
-import React from 'react';
-import { AiOutlineCloudUpload } from 'react-icons/ai'; // Import from 'react-icons/ai' instead of 'react-icons/bs'
-import { imagetoBase64 } from '../Utility/ImagetoBase64';
+import React, { useState } from 'react'
+import { toast } from 'react-hot-toast'
+import { BsCloudUpload } from "react-icons/bs"
+import { ImagetoBase64 } from '../utility/ImagetoBase64'
 
-const NewProduct = () => {
+const Newproduct = () => {
+  const [data, setData] = useState({
+    name: "",
+    category: "",
+    image: "",
+    price: "",
+    description: ""
+  })
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target
+
+    setData((preve) => {
+      return {
+        ...preve,
+        [name]: value
+      }
+    })
+
+  }
+
   const uploadImage = async (e) => {
-    console.log(e.files);
-    const data = await imagetoBase64(e.target.files[0])
-    console.log(data)
-  };
+    const data = await ImagetoBase64(e.target.files[0])
+    // console.log(data)
 
+    setData((preve) => {
+      return {
+        ...preve,
+        image: data
+      }
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log(data)
+
+    const { name, image, category, price } = data
+
+    if (name && image && category && price) {
+      const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMIN}/uploadProduct`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+
+      const fetchRes = await fetchData.json()
+
+      console.log(fetchRes)
+      toast(fetchRes.message)
+
+      setData(() => {
+        return {
+          name: "",
+          category: "",
+          image: "",
+          price: "",
+          description: ""
+        }
+      })
+    }
+    else {
+      toast("Enter required Fields")
+    }
+
+
+  }
   return (
-    <div className='p-4'>
-      <form className='m-auto w-full max-w-md drop-shadow flex flex-col bg-white'>
+    <div className="p-4">
+      <form className='m-auto w-full max-w-md  shadow flex flex-col p-3 bg-white' onSubmit={handleSubmit}>
         <label htmlFor='name'>Name</label>
-        <input type='text' id='name' name='name' className='bg-slate-200 p-1' />
+        <input type={"text"} name="name" className='bg-slate-200 p-1 my-1' onChange={handleOnChange} value={data.name} />
 
         <label htmlFor='category'>Category</label>
-        <select id='category' className='bg-slate-200 p-1 my-1'>
-          <option value='fruits'>Fruits</option>
-          <option value='vegetable'>Vegetables</option>
-          <option value='iceCream'>Ice Cream</option>
-          <option value='pizza'>Pizza</option>
-          <option value='dosa'>Dosa</option>
+        <select className='bg-slate-200 p-1 my-1' id='category' name='category' onChange={handleOnChange} value={data.category}>
+          <option value={"other"}>select category</option>
+          <option value={"fruits"}>Fruits</option>
+          <option value={"vegetable"}>Vegetable</option>
+          <option value={"icream"}>Icream</option>
+          <option value={"dosa"}>Dosa</option>
+          <option value={"pizza"}>Pizza</option>
+          <option value={"rice"}>rice</option>
+          <option value={"cake"}>Cake</option>
+          <option value={"burger"}>Burger</option>
+          <option value={"panner"}>Panner</option>
+          <option value={"sandwich"}>Sandwich</option>
         </select>
 
-        <label htmlFor='image'>Image</label>
-        <div className='h-40 cursor-pointer w-full bg-slate-200 my-3 flex items-center justify-center'>
-          <span className='text-5xl'><AiOutlineCloudUpload /></span>
-          <input type='file' id='image' onChange={uploadImage} className='hidden' />
-        </div>
+        <label htmlFor='image'>Image
+          <div className='h-40 w-full bg-slate-200  rounded flex items-center justify-center cursor-pointer'>
+            {
+              data.image ? <img src={data.image} className="h-full" /> : <span className='text-5xl'><BsCloudUpload /></span>
+            }
+            <input type={"file"} accept="image/*" id="image" onChange={uploadImage} className="hidden" />
+          </div>
+        </label>
 
-        <label htmlFor='price'>Price</label>
-        <input type='text' id='price' name='price' className='bg-slate-200 p-1' />
+
+        <label htmlFor='price' className='my-1'>Price</label>
+        <input type={"text"} className='bg-slate-200 p-1 my-1' name='price' onChange={handleOnChange} value={data.price} />
 
         <label htmlFor='description'>Description</label>
-        <textarea id='description' rows={2} className='bg-slate-200 p-1 my-1 resize-none'></textarea>
+        <textarea rows={2} value={data.description} className='bg-slate-200 p-1 my-1 resize-none' name='description' onChange={handleOnChange}></textarea>
 
-        <button type='submit' className='bg-slate-400 hover:bg-blue-500 text-white font-bold my-2 drop-shadow-sm'>
-          Save
-        </button>
+        <button className='bg-red-500 hover:bg-red-600 text-white text-lg font-medium my-2 drop-shadow'>Save</button>
       </form>
     </div>
-  );
+  )
 }
 
-export default NewProduct;
+export default Newproduct
