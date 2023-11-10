@@ -11,6 +11,9 @@ import Home from './Pages/Home';
 import Menu from './Pages/Menu';
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
+import { store } from "./redux/index"
+import { Provider } from 'react-redux';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,5 +31,7 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

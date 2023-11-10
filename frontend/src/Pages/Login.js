@@ -2,21 +2,31 @@ import React from 'react'
 import { useState } from 'react'
 import logo from '../images/logo.jpg';
 import { BiShow, BiSolidHide } from "react-icons/bi"
-
+import toast from "react-hot-toast"
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRedux } from '../redux/userSlice';
+
 function Login() {
+
   const [showPassword, setshowPassword] = useState(false)
 
   const [data, setData] = useState({
     email: "",
     password: "",
   })
-  console.log(data)
+  const navigate = useNavigate()
+  const userData = useSelector(state => state)
+  const dispatch = useDispatch()
 
   const handleshowPassword = () => {
     setshowPassword(preve => !preve)
   }
 
+  const handleLogout = () => {
+
+  }
 
   const handleOnchange = (e) => {
     const { name, value } = e.target
@@ -28,13 +38,32 @@ function Login() {
     })
   }
   //not to get page refresh
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     //to all proper fields
     const { email, password } = data
     if (email && password) {
       if (password) {
-        alert("successful")
+        const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const dataRes = await fetchData.json()
+        console.log(dataRes)
+
+        toast(+ " " + dataRes.message)
+        if (dataRes.alert) {
+          dispatch(loginRedux(dataRes))
+
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
+        console.log(userData)
       }
       else {
         alert("Recheck Password");
@@ -74,7 +103,7 @@ function Login() {
 
 
 
-          <button type='submit' className='max-w-[150px] rounded-full w-full m-auto text-white cursor-pointer  hover:bg-violet-500 bg-violet-700'>Login</button>
+          <button type='submit' className='max-w-[150px] rounded-full w-full m-auto text-white cursor-pointer  hover:bg-violet-500 bg-violet-700' onClick={handleLogout}>Login</button>
         </form>
         <p className='text-sm '>Not Registered Yet ? <Link to={"/signup"} className='underline text-violet-700'>Signup</Link></p>
       </div >

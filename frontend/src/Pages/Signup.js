@@ -4,6 +4,7 @@ import { BiShow, BiSolidHide } from "react-icons/bi"
 import Login from './Login';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { ImagetoBase64 } from '../utility/ImagetoBase64';
+import toast, { Toaster } from 'react-hot-toast';
 const Signup = () => {
 
   const navigate = useNavigate();
@@ -35,14 +36,30 @@ const Signup = () => {
     })
   }
   //not to get page refresh
-  const handleSubmit = (e) => {
+  console.log(process.env.REACT_APP_SERVER_DOMAIN)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     //to all proper fields
     const { firstname, email, password, confirmpassword } = data
     if (firstname && email && password && confirmpassword) {
-      if (password == confirmpassword) {
-        alert("successful")
-        navigate("/login");
+      if (password === confirmpassword) {
+
+        const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/signup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const dataRes = await fetchData.json()
+        console.log(dataRes)
+        //alert(dataRes.message)
+        toast(dataRes.message)
+        if (dataRes.alert) {
+          navigate("/login");
+        }
+
       }
       else {
         alert("Recheck Password");
