@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -74,7 +75,7 @@ app.post("/login", async (req, res) => {
       };
 
       console.log(dataSend);
-      res.send({ message: "Login successfully", alert: true });
+      res.send({ message: "Login successfully", alert: true, data: dataSend });
     } else {
       res.send({ message: "User not found", alert: false });
     }
@@ -86,8 +87,27 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//product section
+const schemaProduct = mongoose.Schema({
+  name: String,
+  category: String,
+  image: String,
+  price: String,
+  description: String
+});
+const productModel = mongoose.model("product", schemaProduct)
 
+//Save Product
+app.post("/uploadProduct", async (req, res) => {
+  console.log(req.body);
+  const data = productModel(req.body)
+  const datasave = await data.save()
+  res.send({ message: "Successfully Uploaded" });
+});
 
+app.get("/product", async (req, res) => {
+  const data = await productModel.find({})
+  res.send(data)
+})
 
-
-app.listen(PORT, () => console.log("Server is running on port:", PORT));
+app.listen(PORT, () => console.log("Server is running on port:" + PORT));

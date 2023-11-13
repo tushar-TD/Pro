@@ -18,6 +18,7 @@ function Login() {
   })
   const navigate = useNavigate()
   const userData = useSelector(state => state)
+  console.log(userData.user);
   const dispatch = useDispatch()
 
   const handleshowPassword = () => {
@@ -54,11 +55,10 @@ function Login() {
 
         const dataRes = await fetchData.json()
         console.log(dataRes)
+        toast(userData.user.firstname + " " + dataRes.message)
 
-        toast(+ " " + dataRes.message)
         if (dataRes.alert) {
           dispatch(loginRedux(dataRes))
-
           setTimeout(() => {
             navigate("/");
           }, 1000);

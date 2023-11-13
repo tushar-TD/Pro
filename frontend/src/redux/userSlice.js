@@ -24,8 +24,15 @@ export const userSlice = createSlice({
         state.profilepic = action.payload.data.profilepic;
       }
     },
+    logoutRedux: (state, action) => {
+      state._id = "";
+      state.firstname = "";
+      state.lastname = "";
+      state.email = "";
+      state.profilepic = "";
+    }
   },
 });
 
-export const { loginRedux } = userSlice.actions;
+export const { loginRedux, logoutRedux } = userSlice.actions;
 export default userSlice.reducer;

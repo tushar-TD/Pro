@@ -3,7 +3,24 @@ import './App.css';
 import Header from './Components/Header';
 import { Outlet } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { setDataProduct } from './redux/ProductSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
+
 function App() {
+  const dispatch = useDispatch()
+  const productData = useSelector((state) => state.product)
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/product`);
+      const resData = await res.json();  // Fix the typo here
+      console.log(resData);
+      dispatch(setDataProduct(resData))
+    })();
+  }, []);
+
   return (
     <>
       <Toaster />
