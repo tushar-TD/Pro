@@ -74,12 +74,22 @@ function NewProduct() {
         <select name='category' className='  bg-slate-200 p-1 my-1' id='category' onChange={handleOnchange} value={data.category}>
           <option value={"Other"}>Select Category</option>
           <option value={"Fruits"}>Fruits</option>
-          <option value={"Vegetable"}> Vegetable</option>
-          <option value={"IceCream"}>IceCream</option>
-          <option value={"Dosa"}>Dosa</option>
-          <option value={"Pizza"}>Pizza</option>
-          <option value={"ColdDrinks"}>ColdDrinks</option>
           <option value={"Grocery"}>Grocery</option>
+          <option value={"Vegetable"}>Vegetable</option>
+          <option value={"Dairy,Bread & Eggs"}> Dairy,Bread & Eggs</option>
+          <option value={"Biscuits"}> Biscuits</option>
+          <option value={"Paan Corner"}> Paan Corner</option>
+          <option value={"Home Needs"}> Home Needs</option>
+          <option value={"Meat,Fish"}> Meat,Fish</option>
+          <option value={"Breakfast & Sauces"}> Breakfast & Sauces</option>
+          <option value={"Tea,Coffee & More"}> Tea,Coffee & More</option>
+          <option value={"Cold Drinks"}> Cold Drinks</option>
+          <option value={"Masala Dry Fruits"}> Masala Dry Fruits</option>
+          <option value={"Baby Food"}> Baby Food</option>
+
+
+
+
         </select>
 
         <label htmlFor='Image'>Image
