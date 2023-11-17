@@ -2,8 +2,28 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { addCartItem } from '../redux/productSlide';
+import { useDispatch } from 'react-redux';
 
 const CardFeatures = ({ id, image, name, price, category, loading }) => {
+  const dispatch = useDispatch();
+
+  const handleAddCartProduct = (e) => {
+    //e.stopPropagation();
+    dispatch(addCartItem({
+      _id: id,
+      name: name,
+      price: price,
+      category: category,
+
+
+
+
+      image: image
+    }));
+
+  };
+
   return (
     <div className='w-full min-w-[240px] max-w-[200px] bg-white hover:shadow-lg cursor-pointer drop-shadow-md py-5 overflow-hidden'>
       {image ? (
@@ -17,16 +37,17 @@ const CardFeatures = ({ id, image, name, price, category, loading }) => {
             </h3>
             <p className='text-center text-violet-600 font-medium'>{category}</p>
             <p className='font-semibold text-lg capitalize text-center'>{price} ₹</p>
-            <div className='text-center'>
-              <button className='bg-yellow-400 rounded-md py-2 px-5 my-1 mx-auto hover:bg-yellow-400'>
-                Add to cart
-              </button>
-            </div>
           </div>
         </Link>
       ) : (
         <p>{loading}</p>
       )}
+
+      <div className='text-center'>
+        <button className='bg-yellow-400 rounded-md py-2 px-5 my-1 mx-auto hover:bg-yellow-500' onClick={handleAddCartProduct}>
+          Add to cart
+        </button>
+      </div>
     </div>
   );
 };

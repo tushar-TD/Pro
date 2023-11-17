@@ -8,13 +8,13 @@ import AllProduct from '../Components/AllProduct';
 
 const Home = () => {
   const productData = useSelector((state) => state.product.productList);
-  console.log(productData);
+
 
   const homeProductCartList = productData.slice(0, 4);
 
   // All products having category vegetable
   const homeProductCartListVegetable = productData.filter((el) => el.category === 'Vegetable');
-  console.log(homeProductCartListVegetable);
+
 
   const loadingArray = new Array(4).fill(null);
   const loadingArrayFeature = new Array(10).fill(null);
@@ -49,10 +49,10 @@ const Home = () => {
         <div className='md:w-1/2 flex flex-wrap gap-5 p-4 justify-center'>
           {homeProductCartList.length > 0 ? (
             homeProductCartList.map((el) => (
-              <HomeCard id={el._id} image={el.image} name={el.name} price={el.price} />
+              <HomeCard key={el._id} id={el._id} image={el.image} name={el.name} price={el.price} />
             ))
           ) : (
-            loadingArray.map((_, index) => <HomeCard key={index} loading='Loading...' />)
+            loadingArray.map((_, index) => <HomeCard key={index + "loading"} loading='Loading...' />)
           )}
         </div>
       </div>
@@ -67,10 +67,11 @@ const Home = () => {
         <div ref={slideProductRef} className='flex gap-5 overflow-scroll scroll-smooth scrollbar-none'>
           {homeProductCartListVegetable.length > 0 ? (
             homeProductCartListVegetable.map((el) => (
-              <CardFeatures id={el._id} name={el.name} category={el.category} price={el.price} image={el.image} />
+              <CardFeatures key={`Vegetable_${el._id}`} id={el._id} name={el.name} category={el.category} price={el.price} image={el.image} />
+
             ))
           ) : (
-            loadingArrayFeature.map((el, index) => <CardFeatures key={index} loading='Loading...' />)
+            loadingArrayFeature.map((el, index) => <CardFeatures key={index} loading='Loading...' key={index + "cartLoading"} />)
           )}
         </div>
       </div>
