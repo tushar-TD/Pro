@@ -59,7 +59,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const { email } = req.body;
 
   try {
@@ -99,7 +99,7 @@ const productModel = mongoose.model("product", schemaProduct)
 
 //Save Product
 app.post("/uploadProduct", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const data = productModel(req.body)
   const datasave = await data.save()
   res.send({ message: "Successfully Uploaded" });
@@ -108,6 +108,11 @@ app.post("/uploadProduct", async (req, res) => {
 app.get("/product", async (req, res) => {
   const data = await productModel.find({})
   res.send(data)
+})
+
+//payment gateway
+app.post("checkout-payment", async (req, res) => {
+  console.log(req.body)
 })
 
 app.listen(PORT, () => console.log("Server is running on port:" + PORT));
